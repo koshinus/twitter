@@ -10,4 +10,4 @@ java -jar build/libs/twitter-0.0.1-SNAPSHOT.jar
 just run ru.urfu.TwitterApplication
 
 ##Then type in your favorite browser:
-http://127.0.0.1:8080/start
+http://127.0.0.1:8080

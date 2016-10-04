@@ -19,7 +19,7 @@ public class MessageStorage {
         _messages.add("Здесь будет новое сообщение");
     }
 
-    @RequestMapping("/start")
+    @RequestMapping("/messages")
     String renderAllMessages() {
         String messages = _messages
             .stream()
