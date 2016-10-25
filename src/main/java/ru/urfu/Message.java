@@ -7,16 +7,14 @@ import java.util.Random;
  */
 public class Message
 {
-    private String id;
     private String message;
 
-    public Message(String _id, String _message) throws Exception
+    public Message(String _message)
     {
-        if(_id.length() != 11) throw new Exception("Message's ID have wrong size!");
-        id = _id;
         message = _message;
     }
 
+    /*
     public Message(String _message)
     {
         String alphabet =
@@ -28,20 +26,11 @@ public class Message
         id = new String(_id);
         message = _message;
     }
-
-    public String getId()
-    {
-        return id;
-    }
+    */
 
     public String getMessage()
     {
         return message;
-    }
-
-    public void setId(String _id)
-    {
-        id = _id;
     }
 
     public void setMessage(String _message)
@@ -55,8 +44,7 @@ public class Message
         if (other == this) return true;
         if (!(other instanceof Message))return false;
         Message otherMessage = (Message) other;
-        return !this.getId().equals(otherMessage.getId()) ||
-                !this.getMessage().equals(otherMessage.getMessage());
+        return !this.getMessage().equals(otherMessage.getMessage());
     }
 
 }

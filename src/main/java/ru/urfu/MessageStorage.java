@@ -1,7 +1,8 @@
 package ru.urfu;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
@@ -13,42 +14,48 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MessageStorage
 {
-    private static final List<Message> _messages = new ArrayList<>();
+    private static final Map<String, Message> _messages = new HashMap<>();
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     void addMessages(@RequestParam("mes") String mes)
     {
-        _messages.add(new Message(mes));
+        char _id[] = new char[11];
+        Message check = _messages.get(new String(_id));
+        while (check != null)
+        {
+            String alphabet =
+                    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random rand = new Random();
+            for (int i = 0; i < _id.length; i++)
+                _id[i] = alphabet.charAt(rand.nextInt(alphabet.length()));
+        }
+        _messages.put(new String(_id), new Message(mes));
+
     }
-    /*
+
     static
     {
-        _messages.add("Моё первое сообщение");
-        _messages.add("Здесь будет новое сообщение");
+        _messages.put("00000000001", new Message("Моё первое сообщение"));
+        _messages.put("00000000002", new Message("Здесь будет новое сообщение"));
     }
-    */
+
     @RequestMapping(value = "/messages/{id}", method = RequestMethod.GET)
     @ResponseBody
-    String renderMessageById(@RequestParam("id") int _id) throws Exception
+    String renderMessageById(@RequestParam("id") String _id)
     {
-        if(_messages.size() < _id || _id < 1)
-            throw new Exception("Incorrect message index!");
-        else
-        {
-            String message = _messages.get(_id).getMessage();
-            return
-                    "<html>" +
-                            "   <link rel=\"stylesheet\" type=\"text/css\" href=\"/twitter.css\"/>" +
-                            "   <body>" +
-                            "       <h1>twitter</h1>" +
-                            "       This is your twitter application" +
-                            "       <ul class=\"messages\">" +
-                            message +
-                            "       </ul>" +
-                            "   </body>" +
-                            "</html>";
-        }
+        String message = _messages.get(_id).getMessage();
+        return
+                "<html>" +
+                "   <link rel=\"stylesheet\" type=\"text/css\" href=\"/twitter.css\"/>" +
+                "   <body>" +
+                "       <h1>twitter</h1>" +
+                "       This is your twitter application" +
+                "       <ul class=\"messages\">" +
+                        message +
+                "       </ul>" +
+                "   </body>" +
+                "</html>";
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET)
@@ -56,6 +63,7 @@ public class MessageStorage
     String renderAllMessages()
     {
         String messages = _messages
+            .values()
             .stream()
             .map(msg -> "<li>" + msg+ "</li>")
             .collect(Collectors.joining());
@@ -71,6 +79,13 @@ public class MessageStorage
             "       </ul>"+
             "   </body>" +
             "</html>";
+    }
+
+    @RequestMapping(value = "/messages/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void deleteMessage(@RequestParam("id") String _id)
+    {
+        _messages.remove(_id);
     }
 
 }
