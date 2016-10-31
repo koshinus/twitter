@@ -1,8 +1,6 @@
 package ru.urfu;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MessageStorage
 {
-    private static final Map<String, Message> _messages = new HashMap<>();
+    private static final Map<String, String> _messages = new HashMap<>();
 
     private String generateNewKey()
     {
         char _id[] = new char[11];
-        Message check = _messages.get(new String(_id));
+        String check = _messages.get(new String(_id));
         String alphabet =
                 "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         Random rand = new Random();
@@ -36,32 +34,13 @@ public class MessageStorage
     @ResponseBody
     void addMessage(@RequestParam("mes") String mes)
     {
-        _messages.put(generateNewKey(), new Message(mes));
+        _messages.put(generateNewKey(), mes);
     }
-
-    //@RequestMapping(method = RequestMethod.POST)
-    //@ResponseBody
-    String addMessage(@RequestParam Map.Entry<String, Message> mes) //throws Exception
-    {
-        String key = mes.getKey();
-        Message check = _messages.get(key);
-        if(key.length() != 11 || check != null)
-        {
-            String newKey = generateNewKey();
-            _messages.put(newKey, mes.getValue());
-            return newKey;
-        }
-        //throw new Exception("Wrong key length!");
-        //if(check != null) throw new Exception("Key is already use!");
-        _messages.put(key, mes.getValue());
-        return key;
-    }
-
 
     static
     {
-        _messages.put("00000000001", new Message("Моё первое сообщение"));
-        _messages.put("00000000002", new Message("Здесь будет новое сообщение"));
+        _messages.put("00000000001", "Моё первое сообщение");
+        _messages.put("00000000002", "Здесь будет новое сообщение");
     }
 
     public void printMessageStore()
@@ -69,11 +48,20 @@ public class MessageStorage
         System.out.println(_messages);
     }
 
+    List<String> renderMessageIds(String mes)
+    {
+        return _messages.entrySet()
+                .stream()
+                .filter(msg -> msg.getValue().equals(mes))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping(value = "/messages/{id}", method = RequestMethod.GET)
     @ResponseBody
     String renderMessageById(@RequestParam("id") String id)
     {
-        String message = _messages.get(id).getMessage();
+        String message = _messages.get(id);
         return
                 "<html>" +
                 "   <link rel=\"stylesheet\" type=\"text/css\" href=\"/twitter.css\"/>" +
@@ -91,10 +79,9 @@ public class MessageStorage
     @ResponseBody
     String renderAllMessages()
     {
-        String messages = _messages
-            .values()
+        String messages = _messages.values()
             .stream()
-            .map(msg -> "<li>" + msg.getMessage() + "</li>")
+            .map(msg -> "<li>" + msg+ "</li>")
             .collect(Collectors.joining());
         return
             "<html>" +
