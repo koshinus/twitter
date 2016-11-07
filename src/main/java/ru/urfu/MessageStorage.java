@@ -30,11 +30,11 @@ public class MessageStorage
         return new String(_id);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/messages/add={msg}",method = RequestMethod.POST)
     @ResponseBody
-    void addMessage(@RequestParam("mes") String mes)
+    void addMessage(@PathVariable("msg") String msg)
     {
-        _messages.put(generateNewKey(), mes);
+        _messages.put(generateNewKey(), msg);
     }
 
     static
@@ -57,9 +57,9 @@ public class MessageStorage
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/messages/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/messages/id={id}", method = RequestMethod.GET)
     @ResponseBody
-    String renderMessageById(@RequestParam("id") String id)
+    String renderMessageById(@PathVariable("id") String id)
     {
         String message = _messages.get(id);
         return
@@ -96,9 +96,9 @@ public class MessageStorage
             "</html>";
     }
 
-    @RequestMapping(value = "/messages/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/messages/id={id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void deleteMessage(@RequestParam("id") String id)
+    void deleteMessage(@PathVariable("id") String id)
     {
         _messages.remove(id);
     }
