@@ -96,7 +96,7 @@ public class MessageStorage
             "</html>";
     }
 
-    @RequestMapping(value = "/messages/id={id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/messages/del={id}", method = RequestMethod.DELETE)
     @ResponseBody
     void deleteMessage(@PathVariable("id") String id)
     {
