@@ -9,9 +9,8 @@
 		<a href='/addmsg'>Add new message</a><br/>
 		<a href='/delmsg'>Delete message</a><br/>
 		<!--
-        <a href='/register'>Registration</a><br/>
-        <a href='/authorize'>Authorization</a><br/>
+            <a href='/${id}/homepage'>Homepage</a>
+            <a href='/${id}/Posts'>Homepage</a>
         -->
-		${errorMessage}
 	</body>
 </html>

@@ -6,7 +6,7 @@
 		<h1>Twitter</h1>
 		<a href='/'>Twitter</a><br/>
 		<a href='/authorize'>Registration</a><br/>
-		<form name='registrUser' id='registrateUser' method='post' action='#'>
+		<form name='registrateUser' id='registrateUser' method='post' action='#'>
             <h2>Enter your login and password</h2>
             <label for='login'>Login</label>
             <input type='text' id='login' name='login' size='30' value=''>
