@@ -4,7 +4,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import code.storage.MessageStorage;
 
 import javax.inject.Inject;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by vadim on 27.11.16.
  */
-@RestController
+@Controller
 public class MessageController
 {
     @Inject
@@ -22,7 +21,7 @@ public class MessageController
     @RequestMapping({"/"})
     public String mainpage()
     {
-        return "mainmsg";//watch "mainmsg.jsp"
+        return "main";//watch "main.jsp"
     }
 
     @RequestMapping({"/add"})
@@ -32,21 +31,19 @@ public class MessageController
         {
             String message = request.getParameter("message");
             messageStorage.addMessage(message);
-            return "addmsg";//watch "addmsg.jsp"
+            return "add";//watch "add.jsp"
         }
         model.addAttribute("errorMessage", "Incorrect http method");
         return "errorPage";//watch "errorPage.jsp"
     }
 
     @RequestMapping({"/messages"})
-    public String printMessages(Model model, HttpMethod method, HttpServletRequest request)
+    public String printMessages(Model model, HttpMethod method)
     {
         if (method == HttpMethod.GET)
         {
-            String message = request.getParameter("message");
-            messageStorage.addMessage(message);
             model.addAttribute("messages", messageStorage.getMessages());
-            return "msgs";//watch "msgs.jsp"
+            return "messages";//watch "messages.jsp"
         }
         model.addAttribute("errorMessage", "Incorrect http method");
         return "errorPage";//watch "errorPage.jsp"
@@ -67,7 +64,7 @@ public class MessageController
                 model.addAttribute("errorMessage", e.getLocalizedMessage());
                 return "errorPage";//watch "errorPage.jsp"
             }
-            return "delmsg";//watch "delmsg.jsp"
+            return "delete";//watch "delete.jsp"
         }
         model.addAttribute("errorMessage", "Incorrect http method");
         return "errorPage";//watch "errorPage.jsp"

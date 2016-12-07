@@ -5,8 +5,8 @@
 	<body>
 		<h1>Twitter</h1>
 		<a href='/'>Twitter</a><br/>
-		<a href='/msgs'>Messages</a><br/>
-		<a href='/addmsg'>Add new message</a><br/>
+		<a href='/messages'>Messages</a><br/>
+		<a href='/add'>Add new message</a><br/>
 		<form name='deleteMessage' id='deleteMessage' method='delete' action='#'>
             <h2>Enter id of delete message</h2>
             <label for='message'>Message</label>
