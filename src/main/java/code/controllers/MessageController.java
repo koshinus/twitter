@@ -1,13 +1,13 @@
 package code.controllers;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import code.storage.MessageStorage;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.util.AbstractMap;
 
 /**
  * Created by vadim on 27.11.16.
@@ -18,55 +18,56 @@ public class MessageController
     @Inject
     private MessageStorage messageStorage;
 
-    @RequestMapping({"/"})
+    @GetMapping(value = "/")
     public String mainpage()
     {
         return "main";//watch "main.jsp"
     }
 
-    @RequestMapping({"/add"})
-    public String addMessage(Model model, HttpMethod method, HttpServletRequest request)
+    @GetMapping(value = "/add")
+    public String addMessageGet()
     {
-        if (method == HttpMethod.POST)
-        {
-            String message = request.getParameter("message");
-            messageStorage.addMessage(message);
-            return "add";//watch "add.jsp"
-        }
-        model.addAttribute("errorMessage", "Incorrect http method");
-        return "errorPage";//watch "errorPage.jsp"
+        return "add";//watch "add.jsp"
     }
 
-    @RequestMapping({"/messages"})
-    public String printMessages(Model model, HttpMethod method)
+    @PostMapping(value = "/add")
+    public String addMessagePost(Model model, HttpServletRequest request)
     {
-        if (method == HttpMethod.GET)
-        {
-            model.addAttribute("messages", messageStorage.getMessages());
-            return "messages";//watch "messages.jsp"
-        }
-        model.addAttribute("errorMessage", "Incorrect http method");
-        return "errorPage";//watch "errorPage.jsp"
+        String message = request.getParameter("message");
+        messageStorage.addMessage(message);
+        model.addAttribute("messages", messageStorage.getMessages());
+        return "messages";//watch "add.jsp"
     }
 
-    @RequestMapping({"/delete"})
-    public String deleteMessage(Model model, HttpMethod method, HttpServletRequest request)
+    @GetMapping(value = "/messages")
+    public String printMessages(Model model)
     {
-        if (method == HttpMethod.DELETE)
+        model.addAttribute("messages", messageStorage.getMessages());
+        return "messages";//watch "messages.jsp"
+    }
+
+    @GetMapping(value = "/delete")
+    public String delMessageGet()
+    {
+        return "delete";//watch "delete.jsp"
+    }
+
+    @DeleteMapping(value = "/delete")
+    public String delMessageDelete(Model model, HttpServletRequest request)
+    {
+        int messageId = Integer.parseInt(request.getParameter("id"));
+        try
         {
-            int messageId = Integer.parseInt(request.getParameter("id"));
-            try
-            {
-                messageStorage.deleteMessage(messageId);
-            }
-            catch (Exception e)
-            {
-                model.addAttribute("errorMessage", e.getLocalizedMessage());
-                return "errorPage";//watch "errorPage.jsp"
-            }
-            return "delete";//watch "delete.jsp"
+            messageStorage.deleteMessage(messageId);
         }
-        model.addAttribute("errorMessage", "Incorrect http method");
-        return "errorPage";//watch "errorPage.jsp"
+        catch (Exception e)
+        {
+            model.addAttribute("errorMessage", e.getLocalizedMessage());
+            return "errorPage";//watch "errorPage.jsp"
+        }
+        //for(AbstractMap.SimpleImmutableEntry<Integer, String> msg : messageStorage.getMessages())
+        //    System.out.println(msg.getValue());
+        model.addAttribute("messages", messageStorage.getMessages());
+        return "messages";//watch "messages.jsp"
     }
 }
