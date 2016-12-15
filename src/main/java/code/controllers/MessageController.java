@@ -1,3 +1,4 @@
+/*
 package code.controllers;
 
 import org.springframework.stereotype.Controller;
@@ -9,9 +10,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.AbstractMap;
 
+*/
 /**
  * Created by vadim on 27.11.16.
- */
+ *//*
+
 @Controller
 public class MessageController
 {
@@ -71,3 +74,4 @@ public class MessageController
         return "messages";//watch "messages.jsp"
     }
 }
+*/
