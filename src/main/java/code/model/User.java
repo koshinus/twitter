@@ -2,7 +2,7 @@ package code.model;
 
 //import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +15,7 @@ public class User
     protected String password;
     protected ArrayList<String> messages;
 
-    public User() {}
+    public User() { messages = new ArrayList<>(); }
 
     public User(String _login, String _passw)
     {
@@ -38,9 +38,16 @@ public class User
 
     }
 
-    public Collection<String> getMessages()
+    public List<WorkAroundPair> getMessages()
     {
-        return messages;
+        List<WorkAroundPair> res = new ArrayList<>();
+        int i = 0;
+        for(String s : messages)
+        {
+            res.add(new WorkAroundPair(i, s));
+            i++;
+        }
+        return res;
     }
 
     public String getLogin()
@@ -60,7 +67,7 @@ public class User
 
     public void setPassword(String new_passw)
     {
-        login = new_passw;
+        password = new_passw;
     }
 
     public void addMessage(String msg)
@@ -70,7 +77,7 @@ public class User
             System.out.println("Too many messages");
             return;
         }
-        messages.add(messages.size(), msg);
+        messages.add(msg);
     }
 
     @Override
@@ -80,7 +87,6 @@ public class User
         if (other == this) return true;
         if (!(other instanceof User)) return false;
         User otherUser = (User) other;
-        return login.equals(otherUser.login);// &&
-        //password.equals(otherUser.password);
+        return login.equals(otherUser.login);
     }
 }

@@ -1,5 +1,7 @@
 package code.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,58 +24,52 @@ public class UserController
 
     @GetMapping(value = "/")
     public String mainpage() {
-        return "userMain";//watch "main.jsp"
+        return "userMain";//watch "userMain.jsp"
     }
 
-    //@GetMapping(value = "/{id}/add")
     @GetMapping(value = "/add")
-    public String addMessageGet(@RequestParam("id") BigInteger id, Model model)
+    public String addMessageGet()
     {
-        //model.addAttribute("id", id);
-        return "userMessageAdd";//watch "add.jsp"
+        return "userMessageAdd";//watch "userMessageAdd.jsp"
     }
 
-    //@PostMapping(value = "/{id}/add")
     @PostMapping(value = "/add")
-    public String addMessagePost(@RequestParam("id") BigInteger id, Model model, HttpServletRequest request)
+    public String addMessagePost(Model model, HttpServletRequest request)
     {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BigInteger id = userStorage.getIdByLogin((String)authentication.getPrincipal());
         String message = request.getParameter("message");
-        //BigInteger val = BigInteger.valueOf(id);
-        userStorage.get(id).addMessage(message);
-        model.addAttribute("messages", userStorage.get(id).getMessages());
-        //model.addAttribute("id", id);
-        return "userMessages";//watch "add.jsp"
+        userStorage.addUserMessage(id, message);
+        model.addAttribute("messages", userStorage.getUserMessages(id));
+        return "userMessages";//watch "userMessages.jsp"
     }
 
-    //@GetMapping(value = "/{id}/messages")
     @GetMapping(value = "/messages")
-    public String printMessages(@RequestParam("id") BigInteger id, Model model)
+    public String printMessages(Model model)
     {
-        model.addAttribute("messages", userStorage.get(id).getMessages());
-        //model.addAttribute("id", id);
-        return "userMessages";//watch "messages.jsp"
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BigInteger id = userStorage.getIdByLogin((String)authentication.getPrincipal());
+        model.addAttribute("messages", userStorage.getUserMessages(id));
+        return "userMessages";//watch "userMessages.jsp"
     }
 
-    //@GetMapping(value = "/{id}/delete")
     @GetMapping(value = "/delete")
-    public String delMessageGet(@RequestParam("id") BigInteger id, Model model)
+    public String delMessageGet()
     {
-        //model.addAttribute("id", id);
-        return "userMessageDelete";//watch "delete.jsp"
+        return "userMessageDelete";//watch "userMessageDelete.jsp"
     }
 
-    //@DeleteMapping(value = "/{id}/delete")
-    @DeleteMapping(value = "/delete")
-    public String delMessageDelete(@RequestParam("id") BigInteger id, Model model, HttpServletRequest request)
+    @PostMapping(value = "/delete")
+    public String delMessageDelete(Model model, HttpServletRequest request)
     {
-        //BigInteger val = BigInteger.valueOf(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BigInteger id = userStorage.getIdByLogin((String)authentication.getPrincipal());
         int messageId = Integer.parseInt(request.getParameter("id"));
         try
         {
-            userStorage.get(id).deleteMessage(messageId);
-            model.addAttribute("messages", userStorage.get(id).getMessages());
-            //model.addAttribute("id", id);
-            return "userMessages";//watch "messages.jsp"
+            userStorage.deleteUserMessage(id, messageId);
+            model.addAttribute("messages", userStorage.getUserMessages(id));
+            return "userMessages";//watch "userMessages.jsp"
         }
         catch (Exception e)
         {
@@ -82,71 +78,18 @@ public class UserController
         }
     }
 
-    /*
     @GetMapping("/login")
-    public String log()
+    public String login()
     {
         return "userLogin";
     }
-
-    @PostMapping("/login")
-    public String logForm(Model model, HttpServletRequest request)
-    {
-        try
-        {
-            String login = request.getParameter("login");
-            String password = request.getParameter("password");
-            if(!userStorage.userIsExist(login))
-                throw new Exception("User is not exist!");
-            else
-            {
-                User user = new User(login, password);
-                BigInteger id = userStorage.getUserId(user);
-                model.addAttribute("id", id);
-                return "userMessages";
-            }
-        }
-        catch (Exception e)
-        {
-            model.addAttribute("errorMessage", e.getLocalizedMessage());
-            return "errorPage";//watch "errorPage.jsp"
-        }
-    }
-
-    @GetMapping("/registration")
-    public String reg()
-    {
-        return "userRegistration";
-    }
-
-    @PostMapping("/registration")
-    public String regForm(Model model, HttpServletRequest request)
-    {
-        try
-        {
-            String login = request.getParameter("login");
-            String password = request.getParameter("password");
-            User user = new User(login, password);
-            userStorage.addUser(user);
-            BigInteger id = userStorage.getUserId(user);
-            model.addAttribute("id", id);
-            return "userLogin";
-        }
-        catch (Exception e)
-        {
-            model.addAttribute("errorMessage", e.getLocalizedMessage());
-            return "errorPage";//watch "errorPage.jsp"
-        }
-    }
-    */
-
 
     @GetMapping("/registration")
     public String reg(Model model)
     {
         User user = new User();
         model.addAttribute("userForm", user);
-        return "registration";
+        return "userRegistration";
     }
 
     @PostMapping("/registration")
@@ -157,7 +100,7 @@ public class UserController
             userStorage.addUser(user);
             BigInteger id = userStorage.getUserId(user);
             model.addAttribute("id", id);
-            return "login";
+            return "userLogin";
         }
         catch (Exception e)
         {

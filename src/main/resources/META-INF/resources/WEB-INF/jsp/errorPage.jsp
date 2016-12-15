@@ -8,10 +8,6 @@
 		<a href='/messages'>Messages</a><br/>
 		<a href='/add'>Add new message</a><br/>
 		<a href='/delete'>Delete message</a><br/>
-		<!--
-        <a href='/register'>Registration</a><br/>
-        <a href='/authorize'>Authorization</a><br/>
-        -->
 		${errorMessage}
 	</body>
 </html>

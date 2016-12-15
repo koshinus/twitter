@@ -4,12 +4,10 @@
 <html>
 	<body>
 		<h1>Twitter</h1>
-		<a href='/'>Twitter</a><br/>
 		<a href='/login'>Authorization</a><br/>
 		<a href='/registration'>Registration</a><br/>
-		<!--
-            <a href='/${id}/homepage'>Homepage</a>
-            <a href='/${id}/Posts'>Homepage</a>
-        -->
+		<a href='/messages'>User messages</a><br/>
+		<a href='/add'>Add new message</a><br/>
+		<a href='/delete'>Delete message</a><br/>
 	</body>
 </html>

@@ -11,8 +11,8 @@
             <tr><th>Id</th><th>Message</th></tr>
                 <c:forEach items="${messages}" var="item">
                 <tr>
-                    <td>${item.getKey()}</td>
-                    <td>${item.getValue()}</td>
+                    <td>${item.getNum()}</td>
+                    <td>${item.getMsg()}</td>
                 </tr>
                 </c:forEach>
         </tbody></table>

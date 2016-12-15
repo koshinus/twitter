@@ -3,13 +3,14 @@ package code.storage;
 /**
  * Created by vadim on 11.12.16.
  */
+import code.model.WorkAroundPair;
 import code.model.User;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import static code.model.User.loginIsVaild;
 
@@ -34,17 +35,6 @@ public class UserStorage
 
     public int size() { return users.size(); }
 
-    public boolean idIsCorrect(BigInteger id)
-    {
-        return users.keySet().contains(id);
-    }
-
-    public BigInteger getUserId(String login, String password)
-    {
-        User user = new User(login, password);
-        return  getUserId(user);
-    }
-
     public BigInteger getUserId(User user)
     {
         for (BigInteger key : users.keySet())
@@ -54,8 +44,6 @@ public class UserStorage
         }
         return null;
     }
-
-    public User get(BigInteger id) { return users.get(id); }
 
     public User findByLogin(String login)
     {
@@ -67,15 +55,14 @@ public class UserStorage
         return null;
     }
 
-    public void addUser(String login, String password, String repeatPassword) throws Exception
+    public BigInteger getIdByLogin(String login)
     {
-        if(!loginIsVaild(login))
-            throw new Exception("Login is not valid");
-        else if(userIsExist(login))
-            throw new Exception("User is already exist");
-        else if(!password.equals(repeatPassword))
-            throw new Exception("Passwords not equal");
-        else users.put(BigInteger.valueOf(users.size()), new User(login, password));
+        for (BigInteger key : users.keySet())
+        {
+            if(users.get(key).getLogin().equals(login))
+                return key;
+        }
+        return null;
     }
 
     public void addUser(User user) throws Exception
@@ -91,6 +78,18 @@ public class UserStorage
     public void addUserMessage(BigInteger id, String message)
     { users.get(id).addMessage(message); }
 
-    public Collection<String> getUserMessages(BigInteger id)
+    public List<WorkAroundPair> getUserMessages(BigInteger id)
     { return users.get(id).getMessages(); }
+
+    public void deleteUserMessage(BigInteger id, Integer msgId) throws Exception
+    {
+        try
+        {
+            users.get(id).deleteMessage(msgId);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e);
+        }
+    }
 }
