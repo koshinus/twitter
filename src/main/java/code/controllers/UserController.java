@@ -25,41 +25,46 @@ public class UserController
         return "userMain";//watch "main.jsp"
     }
 
-    @GetMapping(value = "/{id}/add")
-    public String addMessageGet(@PathVariable("id") BigInteger id, Model model)
+    //@GetMapping(value = "/{id}/add")
+    @GetMapping(value = "/add")
+    public String addMessageGet(@RequestParam("id") BigInteger id, Model model)
     {
-        model.addAttribute("id", id);
+        //model.addAttribute("id", id);
         return "userMessageAdd";//watch "add.jsp"
     }
 
-    @PostMapping(value = "/{id}/add")
-    public String addMessagePost(@PathVariable("id") BigInteger id, Model model, HttpServletRequest request)
+    //@PostMapping(value = "/{id}/add")
+    @PostMapping(value = "/add")
+    public String addMessagePost(@RequestParam("id") BigInteger id, Model model, HttpServletRequest request)
     {
         String message = request.getParameter("message");
         //BigInteger val = BigInteger.valueOf(id);
         userStorage.get(id).addMessage(message);
         model.addAttribute("messages", userStorage.get(id).getMessages());
-        model.addAttribute("id", id);
+        //model.addAttribute("id", id);
         return "userMessages";//watch "add.jsp"
     }
 
-    @GetMapping(value = "/{id}/messages")
-    public String printMessages(@PathVariable("id") BigInteger id, Model model)
+    //@GetMapping(value = "/{id}/messages")
+    @GetMapping(value = "/messages")
+    public String printMessages(@RequestParam("id") BigInteger id, Model model)
     {
         model.addAttribute("messages", userStorage.get(id).getMessages());
-        model.addAttribute("id", id);
+        //model.addAttribute("id", id);
         return "userMessages";//watch "messages.jsp"
     }
 
-    @GetMapping(value = "/{id}/delete")
-    public String delMessageGet(@PathVariable("id") BigInteger id, Model model)
+    //@GetMapping(value = "/{id}/delete")
+    @GetMapping(value = "/delete")
+    public String delMessageGet(@RequestParam("id") BigInteger id, Model model)
     {
-        model.addAttribute("id", id);
+        //model.addAttribute("id", id);
         return "userMessageDelete";//watch "delete.jsp"
     }
 
-    @DeleteMapping(value = "/{id}/delete")
-    public String delMessageDelete(@PathVariable("id") BigInteger id, Model model, HttpServletRequest request)
+    //@DeleteMapping(value = "/{id}/delete")
+    @DeleteMapping(value = "/delete")
+    public String delMessageDelete(@RequestParam("id") BigInteger id, Model model, HttpServletRequest request)
     {
         //BigInteger val = BigInteger.valueOf(id);
         int messageId = Integer.parseInt(request.getParameter("id"));
@@ -67,7 +72,7 @@ public class UserController
         {
             userStorage.get(id).deleteMessage(messageId);
             model.addAttribute("messages", userStorage.get(id).getMessages());
-            model.addAttribute("id", id);
+            //model.addAttribute("id", id);
             return "userMessages";//watch "messages.jsp"
         }
         catch (Exception e)
@@ -77,6 +82,7 @@ public class UserController
         }
     }
 
+    /*
     @GetMapping("/login")
     public String log()
     {
@@ -132,8 +138,9 @@ public class UserController
             return "errorPage";//watch "errorPage.jsp"
         }
     }
+    */
 
-    /*
+
     @GetMapping("/registration")
     public String reg(Model model)
     {
@@ -158,5 +165,5 @@ public class UserController
             return "errorPage";//watch "errorPage.jsp"
         }
     }
-    */
+
 }

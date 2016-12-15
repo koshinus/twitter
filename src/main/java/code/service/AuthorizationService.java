@@ -1,4 +1,3 @@
-/*
 package code.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.naumen.storage.UserStorage;
+import code.storage.UserStorage;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -20,10 +19,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-*/
-/**
+/*
+**
  * Created by vadim on 12.12.16.
- *//*
+*/
 
 @Service
 public class AuthorizationService implements AuthenticationProvider
@@ -53,4 +52,4 @@ public class AuthorizationService implements AuthenticationProvider
     {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
-}*/
+}

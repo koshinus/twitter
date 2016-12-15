@@ -5,8 +5,8 @@
 	<body>
 		<h1>Twitter</h1>
 		<a href='/'>Twitter</a><br/>
-		<a href='/${id}/add'>Add new message</a><br/>
-		<a href='/${id}/delete'>Delete message</a><br/>
+		<a href='/add'>Add new message</a><br/>
+		<a href='/delete'>Delete message</a><br/>
 		<table border='1px'><tbody>
             <tr><th>Id</th><th>Message</th></tr>
                 <c:forEach items="${messages}" var="item">
